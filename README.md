@@ -6,7 +6,7 @@ This repo is the hands-on companion to my **AI Fundamentals** series on Medium. 
 
 > **"Sun always raises in east"**
 
-![The sentence we'll follow](assets/part1/01_hero_sentence.png)
+![The sentence we'll follow](assets/01_hero_sentence.png)
 
 There are two kinds of scripts:
 
@@ -19,7 +19,7 @@ There are two kinds of scripts:
 
 | Part | Article | Code in this repo |
 | --- | --- | --- |
-| 1 | **The Anatomy of a Reply**: the eight stages from your message to the model's answer | Diagrams in [`assets/part1`](assets/part1) |
+| 1 | **The Anatomy of a Reply**: the eight stages from your message to the model's answer | Diagrams in [`assets`](assets) |
 | 2 | **Rebuild it on your laptop**: real tokens, embeddings, attention and probabilities | `01`–`05` |
 | 3 | **Why it hallucinates**: peaked vs. flat probability distributions | `04_predict_next_token.py` (see *Experiments*) |
 | 4 | **Train a tiny Transformer from scratch** | `06_train_tiny_transformer_from_scratch.py` |
@@ -67,7 +67,7 @@ python 06_train_tiny_transformer_from_scratch.py   # The whole architecture, tra
 
 Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the first time they run. After that they're cached, so it's a one-time wait.
 
-![The eight stages, end to end](assets/part1/11_recap_arc.png)
+![The eight stages, end to end](assets/11_recap_arc.png)
 
 ---
 
@@ -75,12 +75,12 @@ Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the fir
 
 | Script | Stage | What you'll see | Compare with |
 | --- | --- | --- | --- |
-| `01_tokenize.py` | 1. Tokenize | The sentence split by GPT-2's real tokenizer, with each sub-word piece and its ID. It's close to the article's illustrative split, but not identical. That's the point: every tokenizer's vocabulary is its own trained artifact. | [03_tokenize.png](assets/part1/03_tokenize.png) |
-| `02_embeddings.py` | 2. Embed | The real embedding matrix pulled out of GPT-2, with cosine similarity between "Sun", "rises" and "east" versus an unrelated control word ("bicycle"). The measured version of the article's scatter plot. | [04_embeddings.png](assets/part1/04_embeddings.png) |
-| `03_attention.py` | 4. Attention | Saves `attention_heatmap.png`, a real heatmap of one attention head. The lower-left triangle is filled and the upper-right is empty: that's the causal mask, visible directly. | [06_attention.png](assets/part1/06_attention.png) |
-| `04_predict_next_token.py` | 6. Score | The real probability distribution over GPT-2's ~50,000-token vocabulary. Plain GPT-2 isn't chat-tuned, so it *continues* the sentence instead of replying. That contrast is the lesson about fine-tuning. | [08_predict.png](assets/part1/08_predict.png) |
-| `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen and appended one at a time, with its real probability. | [09_sample_loop.png](assets/part1/09_sample_loop.png) |
-| `06_train_tiny_transformer_from_scratch.py` | All of it | Every class is named after a box in the architecture (`TokenEmbedding`, `CausalSelfAttention`, `TransformerBlock`, …). It starts from random numbers and trains for ~1,500 steps on a tiny corpus about the sun rising in the east. The loss drops and the output sharpens from gibberish into the fact. Nobody wrote "east" into this model; gradient descent put it there. | [07_layers.png](assets/part1/07_layers.png) |
+| `01_tokenize.py` | 1. Tokenize | The sentence split by GPT-2's real tokenizer, with each sub-word piece and its ID. It's close to the article's illustrative split, but not identical. That's the point: every tokenizer's vocabulary is its own trained artifact. | [03_tokenize.png](assets/03_tokenize.png) |
+| `02_embeddings.py` | 2. Embed | The real embedding matrix pulled out of GPT-2, with cosine similarity between "Sun", "rises" and "east" versus an unrelated control word ("bicycle"). The measured version of the article's scatter plot. | [04_embeddings.png](assets/04_embeddings.png) |
+| `03_attention.py` | 4. Attention | Saves `attention_heatmap.png`, a real heatmap of one attention head. The lower-left triangle is filled and the upper-right is empty: that's the causal mask, visible directly. | [06_attention.png](assets/06_attention.png) |
+| `04_predict_next_token.py` | 6. Score | The real probability distribution over GPT-2's ~50,000-token vocabulary. Plain GPT-2 isn't chat-tuned, so it *continues* the sentence instead of replying. That contrast is the lesson about fine-tuning. | [08_predict.png](assets/08_predict.png) |
+| `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen and appended one at a time, with its real probability. | [09_sample_loop.png](assets/09_sample_loop.png) |
+| `06_train_tiny_transformer_from_scratch.py` | All of it | Every class is named after a box in the architecture (`TokenEmbedding`, `CausalSelfAttention`, `TransformerBlock`, …). It starts from random numbers and trains for ~1,500 steps on a tiny corpus about the sun rising in the east. The loss drops and the output sharpens from gibberish into the fact. Nobody wrote "east" into this model; gradient descent put it there. | [07_layers.png](assets/07_layers.png) |
 
 ---
 
@@ -88,7 +88,7 @@ Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the fir
 
 - **Different attention heads.** Change `LAYER` and `HEAD` in `03_attention.py`. GPT-2 small has 12 layers with 12 heads each, and different heads specialise in different things.
 - **Teach it something else.** Replace the toy corpus in `06_train_tiny_transformer_from_scratch.py` with any text and watch it learn that instead. It's the most direct way to feel that there's no hardcoded knowledge in the architecture.
-- **See hallucination coming.** Run `04_predict_next_token.py` on a sentence with a genuinely ambiguous continuation instead of a well-known fact. Compare how much flatter the distribution is. It's the live version of the article's [hallucination chart](assets/part1/12_hallucination.png).
+- **See hallucination coming.** Run `04_predict_next_token.py` on a sentence with a genuinely ambiguous continuation instead of a well-known fact. Compare how much flatter the distribution is. It's the live version of the article's [hallucination chart](assets/12_hallucination.png).
 
 ---
 
@@ -106,7 +106,7 @@ ai-fundamentals/
 ├── 05_manual_generation_loop.py
 ├── 06_train_tiny_transformer_from_scratch.py
 └── assets/
-    └── part1/          # Diagrams from the Part 1 article (01–12)
+    └── 01–12 *.png     # Diagrams from the Part 1 article
 ```
 
 ---
@@ -121,7 +121,7 @@ ai-fundamentals/
 
 ## A note on the diagrams
 
-The Part 1 diagrams in `assets/part1` are **illustrative**. The token splits, vector sizes and percentages were chosen for clarity. These scripts replace them with **real numbers** from a real model, so you can put the two side by side and see what the illustrations got right.
+The Part 1 diagrams in `assets` are **illustrative**. The token splits, vector sizes and percentages were chosen for clarity. These scripts replace them with **real numbers** from a real model, so you can put the two side by side and see what the illustrations got right.
 
 ---
 
