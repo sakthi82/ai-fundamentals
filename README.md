@@ -30,22 +30,35 @@ There are two kinds of scripts:
 
 ## Setup
 
-You need **Python 3.10+**. You won't need an API key, a cloud account or a GPU.
+You need **Python 3.10 or newer** (3.12 is the safest choice). You won't need an API key, a cloud account or a GPU.
+
+**1. Check your Python version**
 
 ```bash
-# 1. Check your Python version (macOS often ships an older one)
 python3 --version
-#    Need a newer one on macOS?  brew install python@3.12
+```
 
-# 2. Clone the repo
+If it's older than 3.10, or if step 4 fails to install `torch` on a very new Python, install 3.12 with `brew install python@3.12` and use `python3.12` in place of `python3` in step 3.
+
+**2. Clone the repo**
+
+```bash
 git clone https://github.com/sakthi82/ai-fundamentals.git
 cd ai-fundamentals
+```
 
-# 3. Create an isolated environment
+**3. Create an isolated environment**
+
+```bash
 python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+source venv/bin/activate
+```
 
-# 4. Install dependencies (a few hundred MB, mostly PyTorch)
+On Windows, activate with `venv\Scripts\activate` instead. Your prompt now starts with `(venv)`.
+
+**4. Install dependencies** (a few hundred MB, mostly PyTorch)
+
+```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
@@ -57,13 +70,15 @@ pip install -r requirements.txt
 ## Run them in order
 
 ```bash
-python 01_tokenize.py                              # Stage 1: real BPE tokenization
-python 02_embeddings.py                            # Stage 2: real embedding vectors
-python 03_attention.py                             # Stage 4: real attention weights (+ saves a PNG)
-python 04_predict_next_token.py                    # Stage 6: real next-token probabilities
-python 05_manual_generation_loop.py                # Stage 7: the generation loop, by hand
-python 06_train_tiny_transformer_from_scratch.py   # The whole architecture, trained live
+python 01_tokenize.py
+python 02_embeddings.py
+python 03_attention.py
+python 04_predict_next_token.py
+python 05_manual_generation_loop.py
+python 06_train_tiny_transformer_from_scratch.py
 ```
+
+Each script maps to a stage from Part 1: tokenize (1), embeddings (2), attention (4, and saves a PNG), next-token probabilities (6), the generation loop (7), and the whole architecture trained live (06).
 
 Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the first time they run. After that they're cached, so it's a one-time wait.
 
@@ -76,7 +91,7 @@ Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the fir
 | Script | Stage | What you'll see | Compare with |
 | --- | --- | --- | --- |
 | `01_tokenize.py` | 1. Tokenize | The sentence split by GPT-2's real tokenizer, with each sub-word piece and its ID. It's close to the article's illustrative split, but not identical. That's the point: every tokenizer's vocabulary is its own trained artifact. | [03_tokenize.png](assets/03_tokenize.png) |
-| `02_embeddings.py` | 2. Embed | The real embedding matrix pulled out of GPT-2, with cosine similarity between "Sun", "rises" and "east" versus an unrelated control word ("bicycle"). The measured version of the article's scatter plot. | [04_embeddings.png](assets/04_embeddings.png) |
+| `02_embeddings.py` | 2. Embed | The real embedding matrix pulled out of GPT-2. It compares "sun" with related words and unrelated controls, before and after removing the direction all GPT-2 vectors share, then lists the closest tokens to "east" out of all 50,257 (expect compass directions). | [04_embeddings.png](assets/04_embeddings.png) |
 | `03_attention.py` | 4. Attention | Saves `attention_heatmap.png`, a real heatmap of one attention head. The lower-left triangle is filled and the upper-right is empty: that's the causal mask, visible directly. | [06_attention.png](assets/06_attention.png) |
 | `04_predict_next_token.py` | 6. Score | The real probability distribution over GPT-2's ~50,000-token vocabulary. Plain GPT-2 isn't chat-tuned, so it *continues* the sentence instead of replying. That contrast is the lesson about fine-tuning. | [08_predict.png](assets/08_predict.png) |
 | `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen and appended one at a time, with its real probability. | [09_sample_loop.png](assets/09_sample_loop.png) |
