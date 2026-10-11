@@ -134,4 +134,4 @@ If this helped you, a ⭐ helps others find it.
 
 ## License
 
-Code: [MIT](LICENSE). Diagrams and article text © Sakthi Rajan. Please link back to the original article if you reuse them.
+Code: [MIT](LICENSE). Diagrams and article text Copyright (c) 2026 Sakthirajan. Please link back to the original article if you reuse them.
