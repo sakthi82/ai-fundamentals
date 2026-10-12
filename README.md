@@ -145,7 +145,7 @@ The Part 1 diagrams in `assets` are **illustrative**. The token splits, vector s
 
 ## Follow along
 
-- **Medium:** [@sakthi82](https://medium.com/@sakthi82), where new parts of the series are published
+- **Medium:** [Sakthirajan](https://medium.com/@sakthi82), where new parts of the series are published
 - **Questions or bugs:** open an [issue](../../issues). Good questions often become future parts.
 
 If this helped you, a ⭐ helps others find it.
