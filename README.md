@@ -2,7 +2,7 @@
 
 **Run real code against a real language model and watch, number by number, what happens between pressing Enter and seeing a reply.**
 
-This repo is the hands-on companion to my **AI Fundamentals** series on Medium. [Part 1](https://medium.com/@sakthi82/i-typed-a-broken-sentence-into-an-ai-heres-everything-that-happened-in-the-next-second-f7bfef273d3d) traces one deliberately broken sentence through the eight stages of a language model. These scripts let you run those stages yourself, and [Part 2](https://medium.com/@sakthi82/i-ran-a-real-ai-model-on-my-laptop-the-numbers-didnt-match-my-diagrams-1985d8059d53) walks through their real output and the machine learning algorithm behind each one.
+This repo is the hands-on companion to my **AI Fundamentals** series on Medium. [Part 1](https://medium.com/@sakthi82/i-typed-a-broken-sentence-into-an-ai-heres-everything-that-happened-in-the-next-second-f7bfef273d3d) traces one deliberately broken sentence through the eight stages of a language model. These scripts let you run those stages yourself, and [Part 2](https://medium.com/@sakthi82/i-ran-a-real-ai-model-on-my-laptop-the-numbers-didnt-match-my-diagrams-1985d8059d53) walks through their real output and the machine learning algorithm behind each one. [Part 3](https://medium.com/@sakthi82/i-asked-an-ai-who-first-walked-on-mars-it-gave-me-five-different-answers-decf2bf126e4) uses them to measure why models make things up.
 
 > **"Sun always raises in east"**
 
@@ -21,7 +21,7 @@ There are two kinds of scripts:
 | --- | --- | --- |
 | 1 | **[The Anatomy of a Reply](https://medium.com/@sakthi82/i-typed-a-broken-sentence-into-an-ai-heres-everything-that-happened-in-the-next-second-f7bfef273d3d)**: the eight stages from your message to the model's answer | Diagrams in [`assets`](assets) |
 | 2 | **[Rebuild it on your laptop](https://medium.com/@sakthi82/i-ran-a-real-ai-model-on-my-laptop-the-numbers-didnt-match-my-diagrams-1985d8059d53)**: real tokens, embeddings, attention and probabilities | `01`–`05` |
-| 3 | **Why it hallucinates**: peaked vs. flat probability distributions | `04_predict_next_token.py` (see *Experiments*) |
+| 3 | **[Why it hallucinates](https://medium.com/@sakthi82/i-asked-an-ai-who-first-walked-on-mars-it-gave-me-five-different-answers-decf2bf126e4)**: what happens inside the model when it doesn't know | `07_why_it_hallucinates.py` |
 | 4 | **Train a tiny Transformer from scratch** | `06_train_tiny_transformer_from_scratch.py` |
 
 > Replace each `#` link with the Medium URL as that part is published.
@@ -76,9 +76,10 @@ python 03_attention.py
 python 04_predict_next_token.py
 python 05_manual_generation_loop.py
 python 06_train_tiny_transformer_from_scratch.py
+python 07_why_it_hallucinates.py
 ```
 
-Each script maps to a stage from Part 1: tokenize (1), embeddings (2), attention (4, and saves a PNG), next-token probabilities (6), the generation loop (7), and the whole architecture trained live (06).
+Each script maps to a stage from Part 1: tokenize (1), embeddings (2), attention (4, and saves a PNG), next-token probabilities (6), the generation loop (7), the whole architecture trained live (06), and why models make things up (07).
 
 Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the first time they run. After that they're cached, so it's a one-time wait.
 
@@ -96,6 +97,7 @@ Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the fir
 | `04_predict_next_token.py` | 6. Score | The real probability distribution over GPT-2's ~50,000-token vocabulary. Plain GPT-2 isn't chat-tuned, so it *continues* the sentence instead of replying. That contrast is the lesson about fine-tuning. | [08_predict.png](assets/08_predict.png) |
 | `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen from the top 40 candidates and appended one at a time, with its real probability. A fixed seed means you get the same output as the article; change `TEMPERATURE`, `TOP_K` or `SEED` to experiment. | [09_sample_loop.png](assets/09_sample_loop.png) |
 | `06_train_tiny_transformer_from_scratch.py` | All of it | Each part is built by hand and labelled with its box in the architecture (`CausalSelfAttention`, `TransformerBlock`, the embedding table, the output projection). It starts from small random numbers (loss ≈ 3.2, pure guessing) and trains for 1,500 steps, about 30–60 seconds on a laptop CPU, on five sentences about the sun rising in the east. Watch gibberish turn into half-words, then into "the sun always rises in the east". | [07_layers.png](assets/07_layers.png) |
+| `07_why_it_hallucinates.py` | Hallucination | Asks GPT-2 a well-known question (capital of France), a rarely seen one (capital of Tuvalu) and one with no true answer (first person on Mars). For each, it shows the top guesses, their entropy, and five sampled answers, so you can see how confidence and consistency change when the model doesn't know. | [12_hallucination.png](assets/12_hallucination.png) |
 
 ---
 
@@ -120,6 +122,7 @@ ai-fundamentals/
 ├── 04_predict_next_token.py
 ├── 05_manual_generation_loop.py
 ├── 06_train_tiny_transformer_from_scratch.py
+├── 07_why_it_hallucinates.py
 └── assets/
     └── 01–12 *.png     # Diagrams from the Part 1 article
 ```
