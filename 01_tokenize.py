@@ -1,7 +1,7 @@
 """
 Stage 01 — Split into pieces
 ============================
-Companion to "Anatomy of a Reply" (Stage 01).
+Companion to Part 1 of the AI Fundamentals series ("Anatomy of a Reply"), Stage 1.
 
 We use GPT-2's real tokenizer here (not a from-scratch one) because
 building a byte-pair-encoding trainer from zero is a project on its own,
@@ -34,11 +34,11 @@ def main():
     print("-" * 40)
     for piece, i, d in zip(pieces, ids, decoded):
         # GPT-2's tokenizer marks a leading space with the byte "Ġ" —
-        # this is the real-world equivalent of the "␣" we used in the artifact.
+        # this is the real-world equivalent of the "␣" used in the Part 1 diagrams.
         print(f"{piece:<14} {i:>10}   {d!r}")
 
     print(f"\n{len(ids)} tokens total.")
-    print("Compare this real split to the illustrative one in Stage 01 of the artifact —")
+    print("Compare this real split to the illustrative one in Stage 1 of the Part 1 article —")
     print("close, but not identical, which is exactly the point: every tokenizer's")
     print("vocabulary is its own trained artifact, not a universal standard.")
 

@@ -1,19 +1,17 @@
 """
 The whole block diagram, built by hand
 =========================================
-Companion to the artifact's block diagram section and the Stage 02
-"go deeper" panel.
+Companion to Part 1 of the AI Fundamentals series ("Anatomy of a Reply"),
+and a preview of Part 4: the whole architecture, trained from scratch.
 
 No pretrained weights here — every class below is named after a box in
 the block diagram, and every parameter starts as random numbers. We
 train it, from scratch, on a tiny toy corpus that repeats a handful of
 true sentences about the sun rising in the east. Watch the loss drop
 and the generated text sharpen from noise into that fact — this is
-the "gradient descent shapes the embedding matrix" claim from Stage 02,
-happening live, on your MacBook's CPU, in under a minute.
+the "training shapes the weights" idea from Part 1, happening live, on your MacBook's CPU, in under a minute.
 
-Simplifications, stated up front (matching the artifact's own honesty
-about simplifying): tokenization here is CHARACTER-level, not the
+Simplifications, stated up front: tokenization here is CHARACTER-level, not the
 sub-word BPE used in scripts 01-05 — building a from-scratch BPE
 trainer is a separate project. Positional encoding is fixed sinusoidal
 (no learned parameters), same spirit as RoPE. The model is tiny on
@@ -145,7 +143,18 @@ class TinyLM(nn.Module):
         )
         self.final_norm = nn.LayerNorm(d_model)
         self.output_proj = nn.Linear(d_model, vocab_size, bias=False)
-        self.output_proj.weight = self.token_embedding.weight  # weight tying (Stage 02's note)
+        self.output_proj.weight = self.token_embedding.weight  # weight tying: one matrix, used twice
+        self.apply(self._init_weights)
+
+    @staticmethod
+    def _init_weights(module):
+        # Start every weight as SMALL random numbers, as GPT-2 does (std 0.02).
+        # Large starting values would make the untrained model wildly
+        # overconfident in random guesses.
+        if isinstance(module, (nn.Linear, nn.Embedding)):
+            nn.init.normal_(module.weight, mean=0.0, std=0.02)
+        if isinstance(module, nn.Linear) and module.bias is not None:
+            nn.init.zeros_(module.bias)
 
     def forward(self, idx):
         B, T = idx.shape
@@ -182,7 +191,9 @@ def generate(model, prompt, n_new_tokens=80, temperature=0.7):
 def main():
     model = TinyLM(VOCAB_SIZE, D_MODEL, N_HEADS, N_LAYERS, BLOCK_SIZE)
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"Tiny model: {n_params:,} parameters (a real model is ~10,000x to ~1,000,000x bigger)\n")
+    print(f"Tiny model: {n_params:,} parameters (a real model is ~10,000x to ~1,000,000x bigger)")
+    print(f"Vocabulary: {VOCAB_SIZE} characters, so a random guess scores a loss of about "
+          f"{math.log(VOCAB_SIZE):.1f}\n")
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
 
@@ -196,7 +207,7 @@ def main():
         loss = F.cross_entropy(logits.view(-1, VOCAB_SIZE), yb.view(-1))
 
         optimizer.zero_grad()
-        loss.backward()   # <- this is "backpropagation" from the Stage 02 deep-dive
+        loss.backward()   # <- backpropagation: work out how each weight should change
         optimizer.step()  # <- this is "the gradient-based optimiser" nudging every weight
 
         if step % 300 == 0 or step == STEPS - 1:
@@ -205,9 +216,12 @@ def main():
 
     print("\nAfter training:")
     print(" ", repr(generate(model, "the sun always rises in the", n_new_tokens=20)))
-    print("\nNobody wrote 'east' into this model anywhere. It's here purely because")
-    print("gradient descent kept nudging the weights toward it, exactly as described")
-    print("in the artifact's Stage 02 'go deeper' panel.")
+    print("\nThe word 'east' appears nowhere in the model's code. It started as random")
+    print("numbers and learned the pattern purely from the training text, because")
+    print("gradient descent kept nudging the weights toward better next-character")
+    print("guesses. With only five training sentences it is memorising rather than")
+    print("understanding, but it's the same mechanism that trains real models,")
+    print("on billions of times more text.")
 
 
 if __name__ == "__main__":

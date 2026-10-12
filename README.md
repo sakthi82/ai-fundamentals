@@ -92,10 +92,10 @@ Scripts 01–05 download GPT-2's tokenizer and weights from Hugging Face the fir
 | --- | --- | --- | --- |
 | `01_tokenize.py` | 1. Tokenize | The sentence split by GPT-2's real tokenizer, with each sub-word piece and its ID. It's close to the article's illustrative split, but not identical. That's the point: every tokenizer's vocabulary is its own trained artifact. | [03_tokenize.png](assets/03_tokenize.png) |
 | `02_embeddings.py` | 2. Embed | The real embedding matrix pulled out of GPT-2. It compares "sun" with related words and unrelated controls, before and after removing the direction all GPT-2 vectors share, then lists the closest tokens to "east" out of all 50,257 (expect compass directions). | [04_embeddings.png](assets/04_embeddings.png) |
-| `03_attention.py` | 4. Attention | Saves `attention_heatmap.png`, a real heatmap of one attention head. The lower-left triangle is filled and the upper-right is empty: that's the causal mask, visible directly. | [06_attention.png](assets/06_attention.png) |
+| `03_attention.py` | 4. Attention | Saves `attention_heatmap.png`, a real heatmap of one attention head: everything above the diagonal is empty, which is the causal mask, visible directly. It also searches all 144 heads to show which head looks hardest at each word, because heads specialise. | [06_attention.png](assets/06_attention.png) |
 | `04_predict_next_token.py` | 6. Score | The real probability distribution over GPT-2's ~50,000-token vocabulary. Plain GPT-2 isn't chat-tuned, so it *continues* the sentence instead of replying. That contrast is the lesson about fine-tuning. | [08_predict.png](assets/08_predict.png) |
-| `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen and appended one at a time, with its real probability. | [09_sample_loop.png](assets/09_sample_loop.png) |
-| `06_train_tiny_transformer_from_scratch.py` | All of it | Every class is named after a box in the architecture (`TokenEmbedding`, `CausalSelfAttention`, `TransformerBlock`, …). It starts from random numbers and trains for ~1,500 steps on a tiny corpus about the sun rising in the east. The loss drops and the output sharpens from gibberish into the fact. Nobody wrote "east" into this model; gradient descent put it there. | [07_layers.png](assets/07_layers.png) |
+| `05_manual_generation_loop.py` | 7. Sample & loop | The autoregressive loop written out by hand instead of hidden inside `model.generate()`. Each token is chosen from the top 40 candidates and appended one at a time, with its real probability. A fixed seed means you get the same output as the article; change `TEMPERATURE`, `TOP_K` or `SEED` to experiment. | [09_sample_loop.png](assets/09_sample_loop.png) |
+| `06_train_tiny_transformer_from_scratch.py` | All of it | Each part is built by hand and labelled with its box in the architecture (`CausalSelfAttention`, `TransformerBlock`, the embedding table, the output projection). It starts from small random numbers (loss ≈ 3.2, pure guessing) and trains for 1,500 steps, about 30–60 seconds on a laptop CPU, on five sentences about the sun rising in the east. Watch gibberish turn into half-words, then into "the sun always rises in the east". | [07_layers.png](assets/07_layers.png) |
 
 ---
 
@@ -130,7 +130,7 @@ ai-fundamentals/
 
 - **A script in 01–05 errors on import or model loading.** It's most likely a version mismatch. Check your installed version with `pip show transformers` and compare it to `requirements.txt`.
 - **The model download fails.** Scripts 01–05 need access to `huggingface.co` on first run. Corporate networks and VPNs sometimes block it.
-- **Script 06 output looks different from the comments.** Training starts from random weights, so exact losses and samples vary run to run. The trend (loss falling, text sharpening) is what to look for.
+- **Your numbers differ slightly from the article.** Scripts 05 and 06 use fixed random seeds, but different PyTorch versions and chips can still produce small differences. The pattern (loss falling, text sharpening) is what matters.
 
 ---
 

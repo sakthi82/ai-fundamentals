@@ -94,7 +94,7 @@ def main():
     print("two appear together all the time. Embeddings group words by the role they")
     print("play, not by which words sit next to each other. 'rises' is a verb, so its")
     print("vector lives near other verbs. Linking 'sun' to 'rises' is the job of the")
-    print("attention layers (Stage 4), which is exactly what 03_attention.py shows.")
+    print("attention layers (Stage 4), which you can explore in 03_attention.py.")
 
 
 if __name__ == "__main__":
