@@ -2,7 +2,7 @@
 
 **Run real code against a real language model and watch, number by number, what happens between pressing Enter and seeing a reply.**
 
-This repo is the hands-on companion to my **AI Fundamentals** series on Medium. [Part 1](#) traces one deliberately broken sentence through the eight stages of a language model. These scripts let you run those stages yourself instead of just reading about them.
+This repo is the hands-on companion to my **AI Fundamentals** series on Medium. [Part 1](https://medium.com/@sakthi82/i-typed-a-broken-sentence-into-an-ai-heres-everything-that-happened-in-the-next-second-f7bfef273d3d) traces one deliberately broken sentence through the eight stages of a language model. These scripts let you run those stages yourself, and [Part 2](https://medium.com/@sakthi82/i-ran-a-real-ai-model-on-my-laptop-the-numbers-didnt-match-my-diagrams-1985d8059d53) walks through their real output and the machine learning algorithm behind each one.
 
 > **"Sun always raises in east"**
 
@@ -19,8 +19,8 @@ There are two kinds of scripts:
 
 | Part | Article | Code in this repo |
 | --- | --- | --- |
-| 1 | **The Anatomy of a Reply**: the eight stages from your message to the model's answer | Diagrams in [`assets`](assets) |
-| 2 | **Rebuild it on your laptop**: real tokens, embeddings, attention and probabilities | `01`–`05` |
+| 1 | **[The Anatomy of a Reply](https://medium.com/@sakthi82/i-typed-a-broken-sentence-into-an-ai-heres-everything-that-happened-in-the-next-second-f7bfef273d3d)**: the eight stages from your message to the model's answer | Diagrams in [`assets`](assets) |
+| 2 | **[Rebuild it on your laptop](https://medium.com/@sakthi82/i-ran-a-real-ai-model-on-my-laptop-the-numbers-didnt-match-my-diagrams-1985d8059d53)**: real tokens, embeddings, attention and probabilities | `01`–`05` |
 | 3 | **Why it hallucinates**: peaked vs. flat probability distributions | `04_predict_next_token.py` (see *Experiments*) |
 | 4 | **Train a tiny Transformer from scratch** | `06_train_tiny_transformer_from_scratch.py` |
 
